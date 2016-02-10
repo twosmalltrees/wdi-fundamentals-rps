@@ -1,10 +1,13 @@
+
 ////////////////////////////////////////////////
 /*   Provided Code - Please Don't Edit   */
 ////////////////////////////////////////////////
+
 'use strict';
 
+
 function getInput() {
-    console.log("Please choose either 'rock', 'paper', or 'scissors'.")
+    console.log("Please choose either 'rock', 'paper', or 'scissors'. \n");
     return prompt();
 }
 function randomPlay() {
@@ -22,16 +25,16 @@ function randomPlay() {
 ////////////////////////////////////////////////
 
 function getPlayerMove(move) {
-    // Write an expression that operates on a variable called `move`
-    // If a `move` has a value, your expression should evaluate to that value.
-    // However, if `move` is not specified / is null, your expression should equal `getInput()`.
-    return move || getInput();
+    var playerMove = getInput().toLowerCase();
+
+    while (playerMove !== "rock" && playerMove !== "paper" && playerMove !== "scissors" ) {
+        playerMove = prompt("Sorry, but '"+ playerMove + "' isn\'t a move. Please enter either 'scissors', 'paper' or 'rock'.").toLowerCase();
+    }
+    
+    return move || playerMove;
 }
 
 function getComputerMove(move) {
-    // Write an expression that operates on a variable called `move`
-    // If a `move` has a value, your expression should evaluate to that value.
-    // However, if `move` is not specified / is null, your expression should equal `randomPlay()`.
     return move || randomPlay();
 }
 
@@ -71,11 +74,105 @@ function getWinner(playerMove,computerMove) {
 }
 
 function playToFive() {
-    console.log("Let's play Rock, Paper, Scissors");
+
     var playerWins = 0;
     var computerWins = 0;
-    // Write code that plays 'Rock, Paper, Scissors' until either the player or the computer has won five times.
-    /* YOUR CODE HERE */
+    var playerMove;
+    var computerMove;
+    var winner;
+
+    logAlert("Let's play Rock, Paper, Scissors. First to 5 wins");
+
+    while (playerWins < 5 && computerWins < 5) {
+        playerMove = getPlayerMove();
+        computerMove = getComputerMove();
+        winner = getWinner(playerMove, computerMove);
+
+        if (winner=="player") {
+            playerWins ++;
+        } else if (winner=="computer") {
+            computerWins ++;
+        }
+
+        logAlert(getRoundSummary(playerMove, computerMove, winner, playerWins, computerWins));
+    }
+
+    // LOG THE OVERALL VICTOR
+
+    logAlert(getGameSummary(playerWins, computerWins));
+
     return [playerWins, computerWins];
+}
+
+function playTo(x) {
+
+    var playerWins = 0;
+    var computerWins = 0;
+    var playerMove;
+    var computerMove;
+    var winner;
+
+    if (x === undefined) {
+       var rounds = prompt("Rock Paper Scissors: First to how many?");
+       while (isNaN(Number(rounds)) === true || rounds ==="") {
+         rounds = prompt("Errr...that wasn't a number. Please enter a number. \n \nFirst to how many?");
+       }
+        x = rounds;
+    }
+
+    logAlert("Let's play Rock, Paper, Scissors. First to " + x + " wins.");
+
+    while (playerWins < x && computerWins < x) {
+        playerMove = getPlayerMove();
+        computerMove = getComputerMove();
+        winner = getWinner(playerMove, computerMove);
+
+        if (winner=="player") {
+            playerWins ++;
+        } else if (winner=="computer") {
+            computerWins ++;
+        }
+
+        logAlert(getRoundSummary(playerMove, computerMove, winner, playerWins, computerWins));
+    }
+
+    // Log the overall victor
+
+    logAlert(getGameSummary(playerWins, computerWins));
+
+    return [playerWins, computerWins];
+}
+
+// ADDITIONAL FUNCTIONS
+
+function getRoundSummary(playerMove, computerMove, winner, playerWins, computerWins) {
+
+    //  ** BUILDS THE ROUND SUMMARY ** //
+
+    if (winner == "tie") {
+        return "The human player chose " + playerMove + ", as did the computer. How very dull... \n \nThe score remains player: " + playerWins + " to computer: " + computerWins + ". \n";
+    } else {
+        return "The human player chose " + playerMove + " while the evil computer chose " + computerMove 
+        + ". After a battle of epic proportions, the " + winner + " won. \n \nThe current score is player: " + playerWins + " to computer: " + computerWins + ". \n";
+    }
+}
+
+function getGameSummary(playerWins, computerWins) {
+
+    // ** BUILDS THE FULL GAME SUMMARY ** //
+
+    if (playerWins > computerWins) {
+        return "AND THE VICTOR IS...THE HUMAN!!! " + "With a winning score of " + playerWins + " to " + computerWins + ". \n";
+    } else {
+        return "THE COMPUTER WON, " + "with a devastating score of " + computerWins + " to " + playerWins + ". All hail our new machine overlords. \n";
+    }
+}
+
+function logAlert(text) {
+
+    // ** LOGS PROVIDED TEXT TO CONSOLE, AND ALSO DISPLAYS IT IN AN ALERT BOX SO THE GAME CAN BE PLAYED IN BROWSER ** //
+
+    console.log(text);
+    alert(text);
 }
 
